@@ -56,6 +56,14 @@ git clone https://github.com/fatih/vim-go.git
 git clone https://github.com/ctrlpvim/ctrlp.vim.git
 git clone https://github.com/soonick/grepfrut.git
 
+mkdir -p ~/.vim/colors
+
+cd ~/.vim/colors
+git clone https://github.com/zefei/simple-dark ./
+
+" Move colorsheme to colors root"
+mv ./colors/simple-dark.vim ../simple-dark.vim
+
 # Create .vimrc file
 mv ~/.vimrc ~/.vimrc.back
 
@@ -65,6 +73,9 @@ set encoding=utf-8
 
 " Automatic syntax highlight "
 syntax on
+
+" Set color scheme "
+colorscheme simple-dark
 
 " Set mapleader key "
 let mapleader=" "
