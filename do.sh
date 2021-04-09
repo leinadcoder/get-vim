@@ -45,21 +45,13 @@ fi
 
 sudo make install
 
-# Install LanguageTool in the same folder as vim
-cd "$location"
-language_tool="LanguageTool-stable"
-wget https://www.languagetool.org/download/${language_tool}.zip
-unzip ${language_tool}.zip
-rm ${language_tool}.zip
-
 # Install plugins
 mkdir -p ~/.vim/pack/my-plugins/start
 
 cd ~/.vim/pack/my-plugins/start
-git clone https://github.com/dpelle/vim-LanguageTool.git
-git clone https://github.com/scrooloose/nerdtree.git
+git clone https://github.com/preservim/nerdtree
 git clone https://github.com/jistr/vim-nerdtree-tabs.git
-git clone https://github.com/scrooloose/syntastic.git
+git clone https://github.com/vim-syntastic/syntastic
 git clone https://github.com/fatih/vim-go.git
 git clone https://github.com/ctrlpvim/ctrlp.vim.git
 git clone https://github.com/soonick/grepfrut.git
@@ -68,14 +60,18 @@ git clone https://github.com/soonick/grepfrut.git
 mv ~/.vimrc ~/.vimrc.back
 
 cat > ~/.vimrc << EOM
-" LanguageTool binary location for LanguageTool plugin "
-let g:languagetool_jar='${location}/${language_tool}/languagetool-commandline.jar'
-
 " I want my files to be utf-8 "
 set encoding=utf-8
 
 " Automatic syntax highlight "
 syntax on
+
+" Set mapleader key "
+let mapleader=" "
+
+" Save, Quit short cut "
+nmap <leader>w :w<CR>
+nmap <leader>q :q<CR>
 
 " Reload files modified outside of Vim "
 set autoread
@@ -97,6 +93,9 @@ set shiftwidth=2
 autocmd FileType * set tabstop=2
 autocmd FileType * set shiftwidth=2
 
+" Enable filetype plugins "
+filetype plugin on
+
 " For Golang use tabs "
 autocmd FileType go set noexpandtab
 
@@ -111,6 +110,9 @@ set autoindent
 " Show line numbers "
 set number
 
+" Make number ruler relative "
+set relativenumber
+
 " Highlight all occurrences of a search "
 set hlsearch
 
@@ -123,11 +125,6 @@ set colorcolumn=81
 
 " Allow the use of 256 colors in the terminal "
 set t_Co=256
-
-" Set some theme colors "
-hi Directory guifg=#FF0000 ctermfg=68
-highlight Comment ctermfg=97
-highlight Search ctermfg=0 ctermbg=2
 
 " Allows normal mode to autocomplete paths using tab like bash does "
 set wildmenu
@@ -239,6 +236,16 @@ au FileType go nmap <leader>dt <Plug>(go-def-tab)
 
 " <Ctrl-j> Pretty formats curent buffer as JSON "
 nnoremap  <C-j> :%!python -m json.tool<CR>
+
+" Set recommended settings for syntastic "
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 
 " Customize the statusline "
 set laststatus=2
